@@ -1,0 +1,1 @@
+"""Manufactured counterparty generation."""

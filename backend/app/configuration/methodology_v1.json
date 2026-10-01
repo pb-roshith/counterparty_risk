@@ -1,0 +1,738 @@
+{
+  "version": "1.1.0",
+  "status": "published",
+  "approver": "Methodology document",
+  "effective_date": "2026-08-31",
+  "relationships": [
+    {
+      "code": "L1-01",
+      "parameters": [
+        {
+          "name": "Ownership and control",
+          "weight": 0.35,
+          "formula_text": "Ownership % = Parent-owned shares ÷ Total subsidiary shares × 100. Also calculate Voting Control % = Parent-controlled votes ÷ Total votes × 100. Use the higher-risk result.",
+          "rating_thresholds_text": "1: Below 20%, no influence. 2: 20% to below 30%. 3: 30% to below 50%, significant influence. 4: 50% to below 75%, majority control. 5: 75% or more, or unilateral control."
+        },
+        {
+          "name": "Subsidiary financial materiality",
+          "weight": 0.35,
+          "formula_text": "Revenue Share = Subsidiary revenue ÷ Group revenue × 100. Asset Share = Subsidiary assets ÷ Group assets × 100. EBITDA Share = Subsidiary EBITDA ÷ Group EBITDA × 100. Financial Materiality = 40% Revenue Share + 30% Asset Share + 30% EBITDA Share.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Parent exposure and support",
+          "weight": 0.3,
+          "formula_text": "Support Exposure = Equity investment + Intercompany loans + Receivables + Guarantees + Expected support. Exposure Ratio = Support Exposure ÷ Parent adjusted capital × 100.",
+          "rating_thresholds_text": "1: Below 2%. 2: 2% to below 5%. 3: 5% to below 10%. 4: 10% to below 20%. 5: 20% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-02",
+      "parameters": [
+        {
+          "name": "Effective ultimate ownership",
+          "weight": 0.4,
+          "formula_text": "Effective Ownership % = Ownership percentage at Layer 1 × Layer 2 × remaining layers. Example: 80% × 60% = 48%. Add parallel ownership paths where legally appropriate.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 30%. 4: 30% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Voting and control rights",
+          "weight": 0.35,
+          "formula_text": "Control Coverage % = Voting rights controlled + equivalent board or reserved-matter control, converted to an approved 0 to 100 control measure. Use the strongest verified control right.",
+          "rating_thresholds_text": "1: No control. 2: Minor protective rights. 3: Significant influence. 4: De facto control or major veto. 5: Absolute or unilateral control."
+        },
+        {
+          "name": "Ownership-path complexity",
+          "weight": 0.25,
+          "formula_text": "Complexity Index = Additional ownership layers + 2 × Nominee/trust arrangements + 2 × Unverified entities + Higher-risk jurisdiction points.     ( It is multiplied by 2 because nominee or trust arrangements and unverified entities are being treated as twice as significant as a normal ownership layer. The number 2 is a chosen risk weight, not a mandatory regulatory constant.)",
+          "rating_thresholds_text": "1: 0 to 1 point. 2: 2 to 3. 3: 4 to 5. 4: 6 to 8. 5: Above 8 or a material part of the path is unverified."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-03",
+      "parameters": [
+        {
+          "name": "Common shareholder holding",
+          "weight": 0.4,
+          "formula_text": "Common Holding % = Minimum of shareholder ownership in Entity A and shareholder ownership in Entity B.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 30%. 4: 30% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Common control rights",
+          "weight": 0.35,
+          "formula_text": "Control Coverage % = Shared shareholder-controlled board seats or voting rights ÷ Relevant total seats or votes × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Intercompany dependency",
+          "weight": 0.25,
+          "formula_text": "Dependency % = Transactions + Funding + Guarantees between linked entities ÷ Relevant revenue, funding, or debt total × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-04",
+      "parameters": [
+        {
+          "name": "Board overlap",
+          "weight": 0.4,
+          "formula_text": "Board Overlap % = Number of shared directors ÷ Number of directors on the smaller board × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Decision authority",
+          "weight": 0.35,
+          "formula_text": "Decision Authority % = Critical decision areas controlled by shared persons ÷ Total defined critical decision areas × 100. Areas may include finance, risk, strategy, procurement, and operations.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 75%. 5: 75% or more."
+        },
+        {
+          "name": "Overlapping tenure",
+          "weight": 0.25,
+          "formula_text": "Overlap Tenure = Minimum active overlapping appointment period across the two entities.",
+          "rating_thresholds_text": "1: Inactive or below 3 months. 2: 3 months to below 1 year. 3: 1 to below 3 years. 4: 3 to below 5 years. 5: 5 years or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-05",
+      "parameters": [
+        {
+          "name": "Formal group classification",
+          "weight": 0.4,
+          "formula_text": "Classification Rating = Approved rating mapped from the bank’s formal group type and grouping rationale.",
+          "rating_thresholds_text": "1: Informational group. 2: Candidate group under review. 3: Approved borrower group. 4: Approved economic group. 5: Regulatory connected group."
+        },
+        {
+          "name": "Group EAD concentration",
+          "weight": 0.35,
+          "formula_text": "Group EAD Concentration % = Connected Group EAD ÷ Relevant portfolio EAD × 100. A capital-based denominator may also be used under policy.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Intra-group financial dependency",
+          "weight": 0.25,
+          "formula_text": "Dependency % = Intra-group funding + Guarantees + Cash-pool balances ÷ Group funding or debt × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-06",
+      "parameters": [
+        {
+          "name": "Guarantee coverage",
+          "weight": 0.4,
+          "formula_text": "Guarantee Coverage % = Enforceable guarantee amount ÷ Supported exposure × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 80%. 5: 80% or more."
+        },
+        {
+          "name": "Guarantor burden",
+          "weight": 0.35,
+          "formula_text": "Guarantor Burden % = Total potential guarantee calls ÷ Guarantor adjusted capital × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Borrower support dependency",
+          "weight": 0.25,
+          "formula_text": "Support Dependency % = Funding supported by guarantor ÷ Total borrower funding × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 80%. 5: 80% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-07",
+      "parameters": [
+        {
+          "name": "Cross-guarantee coverage",
+          "weight": 0.4,
+          "formula_text": "Coverage % = Cross-guaranteed obligations ÷ Combined entity debt × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 80%. 5: 80% or more."
+        },
+        {
+          "name": "Guarantee-chain complexity",
+          "weight": 0.25,
+          "formula_text": "Complexity Score = Number of guarantee links + 3 points for a circular guarantee + 2 points for each unresolved legal link.",
+          "rating_thresholds_text": "1: One simple link. 2: Two links. 3: Three links. 4: Four or more non-circular links. 5: Circular, opaque, or unresolved chain."
+        },
+        {
+          "name": "Joint guarantee burden",
+          "weight": 0.35,
+          "formula_text": "Joint Burden % = Potential calls across the guarantee network ÷ Combined adjusted capital of guarantors × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-08",
+      "parameters": [
+        {
+          "name": "Collateral utilisation",
+          "weight": 0.4,
+          "formula_text": "Collateral Utilisation % = Total secured claims ÷ Eligible collateral value after approved haircut × 100.",
+          "rating_thresholds_text": "1: Below 50%. 2: 50% to below 70%. 3: 70% to below 90%. 4: 90% to 110%. 5: Above 110%."
+        },
+        {
+          "name": "Shared-asset concentration",
+          "weight": 0.3,
+          "formula_text": "Concentration % = Largest shared asset value ÷ Total eligible collateral value × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Collateral risk adjustment",
+          "weight": 0.3,
+          "formula_text": "Collateral Risk % = Approved market haircut + Valuation-age adjustment + Lien/legal-priority adjustment.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more, or unperfected/disputed collateral."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-09",
+      "parameters": [
+        {
+          "name": "Ownership and control",
+          "weight": 0.35,
+          "formula_text": "JV Control % = Highest of ownership percentage, voting-right percentage, or board-control percentage.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 50%, influence only. 4: Joint control. 5: Dominant or de facto control."
+        },
+        {
+          "name": "Capital commitment",
+          "weight": 0.35,
+          "formula_text": "Commitment Ratio % = Equity commitment + Shareholder loans + Guarantees ÷ Investor adjusted capital × 100.",
+          "rating_thresholds_text": "1: Below 2%. 2: 2% to below 5%. 3: 5% to below 10%. 4: 10% to below 20%. 5: 20% or more."
+        },
+        {
+          "name": "Strategic cash-flow dependency",
+          "weight": 0.3,
+          "formula_text": "Dependency % = Revenue, purchases, dividends, or off-take linked to JV ÷ Relevant entity total × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-10",
+      "parameters": [
+        {
+          "name": "Facility materiality",
+          "weight": 0.4,
+          "formula_text": "Facility Exposure = Drawn amount + Undrawn commitment × CCF. Facility Materiality % = Facility Exposure ÷ Total borrower debt × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Covenant/default linkage",
+          "weight": 0.3,
+          "formula_text": "Default Linkage % = Debt subject to cross-default or acceleration ÷ Total borrower debt × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 80%. 5: 80% or more, or automatic cross-default."
+        },
+        {
+          "name": "Refinancing proximity",
+          "weight": 0.3,
+          "formula_text": "Months to Maturity = Facility maturity date minus calculation date, converted into months.",
+          "rating_thresholds_text": "1: More than 36 months. 2: 24 to 36 months. 3: 12 to below 24 months. 4: 6 to below 12 months. 5: Below 6 months."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L1-11",
+      "parameters": [
+        {
+          "name": "Head-office funding dependency",
+          "weight": 0.4,
+          "formula_text": "Funding Dependency % = Net funding received from head office ÷ Branch total funding × 100. Legal status acts as an override where the branch and head office are the same legal entity.",
+          "rating_thresholds_text": "1: Below 10% and legally separate. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 80%. 5: 80% or more, or the same legal entity."
+        },
+        {
+          "name": "Branch financial materiality",
+          "weight": 0.35,
+          "formula_text": "Materiality % = 40% Branch Asset Share + 30% Branch Revenue Share + 30% Branch EAD Share.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Jurisdiction and transfer risk",
+          "weight": 0.25,
+          "formula_text": "Jurisdiction Score = Approved country, transfer, convertibility, ring-fencing, and resolution-risk score normalized to 0 to 100.",
+          "rating_thresholds_text": "1: 0 to below 20. 2: 20 to below 40. 3: 40 to below 60. 4: 60 to below 80. 5: 80 to 100 or blocked transfer."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-01",
+      "parameters": [
+        {
+          "name": "Purchase dependency",
+          "weight": 0.4,
+          "formula_text": "Purchase Dependency % = Purchases from supplier ÷ Total purchases × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Supplier replacement time",
+          "weight": 0.3,
+          "formula_text": "Replacement Time = Estimated months required to qualify, contract, and activate an alternative supplier.",
+          "rating_thresholds_text": "1: Below 1 month. 2: 1 to below 3 months. 3: 3 to below 6 months. 4: 6 to below 12 months. 5: 12 months or more, or no alternative supplier."
+        },
+        {
+          "name": "Production dependency",
+          "weight": 0.3,
+          "formula_text": "Production Dependency % = Output dependent on supplier input ÷ Total output × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 75%. 5: 75% or more, or production stops without the supplier."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-02",
+      "parameters": [
+        {
+          "name": "Revenue concentration",
+          "weight": 0.4,
+          "formula_text": "Revenue Concentration % = Revenue from customer ÷ Total revenue × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Receivables concentration",
+          "weight": 0.3,
+          "formula_text": "Receivables Concentration % = Receivables from customer ÷ Total receivables × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Overdue receivables",
+          "weight": 0.3,
+          "formula_text": "Overdue Ratio % = Customer receivables overdue beyond approved period ÷ Total receivables from customer × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more, or specifically impaired."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-03",
+      "parameters": [
+        {
+          "name": "Path dependency",
+          "weight": 0.4,
+          "formula_text": "Path Dependency % = Dependency at Edge 1 × Dependency at Edge 2 × remaining edge dependencies. Example: 60% × 50% = 30%.",
+          "rating_thresholds_text": "1: Below 2%. 2: 2% to below 5%. 3: 5% to below 10%. 4: 10% to below 20%. 5: 20% or more."
+        },
+        {
+          "name": "Critical-node concentration",
+          "weight": 0.35,
+          "formula_text": "Node Concentration % = Critical supply paths passing through node ÷ Total identified critical paths × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Supply-path depth",
+          "weight": 0.25,
+          "formula_text": "Path Depth = Number of relationship edges in the shortest relevant supply path.",
+          "rating_thresholds_text": "1: More than 5 tiers. 2: 4 to 5 tiers. 3: 3 tiers. 4: 2 tiers. 5: Direct or near-direct critical dependency."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-04",
+      "parameters": [
+        {
+          "name": "Funding dependency",
+          "weight": 0.4,
+          "formula_text": "Funding Dependency % = Funding from shared provider or market ÷ Total funding × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Refinancing proximity",
+          "weight": 0.3,
+          "formula_text": "Months to Refinancing = Refinancing date minus calculation date, converted into months.",
+          "rating_thresholds_text": "1: More than 36 months. 2: 24 to 36 months. 3: 12 to below 24 months. 4: 6 to below 12 months. 5: Below 6 months."
+        },
+        {
+          "name": "Alternative funding coverage",
+          "weight": 0.3,
+          "formula_text": "Coverage % = Available alternative lines + Unrestricted liquidity ÷ Funding due within 12 months × 100.",
+          "rating_thresholds_text": "1: 150% or more. 2: 120% to below 150%. 3: 100% to below 120%. 4: 75% to below 100%. 5: Below 75%."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-05",
+      "parameters": [
+        {
+          "name": "Sponsor ownership and control",
+          "weight": 0.4,
+          "formula_text": "Sponsor Control % = Highest ownership percentage, voting-right percentage, or board-control percentage.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 50%, significant influence. 4: Joint or de facto control. 5: Majority control."
+        },
+        {
+          "name": "Sponsor funding dependency",
+          "weight": 0.35,
+          "formula_text": "Funding Dependency % = Sponsor equity + Shareholder loans + Sponsor guarantees ÷ Total entity funding × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Portfolio correlation",
+          "weight": 0.25,
+          "formula_text": "Portfolio Correlation % = Portfolio companies sharing the same primary sector, geography, or funding strategy ÷ Total relevant portfolio companies × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 75%. 5: 75% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-06",
+      "parameters": [
+        {
+          "name": "Payment-flow materiality",
+          "weight": 0.4,
+          "formula_text": "Flow Materiality % = Payment value with connected entity ÷ Total relevant inflows or outflows × 100. Calculate inflows and outflows separately and use the relevant risk direction.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Payment persistence",
+          "weight": 0.25,
+          "formula_text": "Persistence % = Months with qualifying payment activity ÷ Months in observation window × 100.",
+          "rating_thresholds_text": "1: Below 20%. 2: 20% to below 40%. 3: 40% to below 60%. 4: 60% to below 80%. 5: 80% or more."
+        },
+        {
+          "name": "Payment-flow disruption",
+          "weight": 0.35,
+          "formula_text": "Flow Reduction % = Historical average flow minus current flow ÷ Historical average flow × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more, or flow has stopped."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-07",
+      "parameters": [
+        {
+          "name": "Net exposure materiality",
+          "weight": 0.4,
+          "formula_text": "Net Exposure = Current Exposure + Potential Future Exposure - Eligible Collateral. Exposure Ratio % = Net Exposure ÷ Approved counterparty limit or capital measure × 100.",
+          "rating_thresholds_text": "1: Below 2%. 2: 2% to below 5%. 3: 5% to below 10%. 4: 10% to below 20%. 5: 20% or more."
+        },
+        {
+          "name": "Wrong-way-risk ratio",
+          "weight": 0.3,
+          "formula_text": "Wrong-way Risk % = Exposure positively linked to the counterparty’s stress factors ÷ Total net exposure × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more, or specific wrong-way risk exists."
+        },
+        {
+          "name": "Unsecured exposure",
+          "weight": 0.3,
+          "formula_text": "Unsecured Exposure % = Exposure not covered by enforceable netting or eligible collateral ÷ Gross exposure × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 75%. 5: 75% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-08",
+      "parameters": [
+        {
+          "name": "Critical workload dependency",
+          "weight": 0.4,
+          "formula_text": "Workload Dependency % = Critical business operations supported by provider ÷ Total critical operations × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Provider replacement time",
+          "weight": 0.3,
+          "formula_text": "Replacement Time = Estimated months required to contract, migrate, test, and activate an approved alternative.",
+          "rating_thresholds_text": "1: Below 1 month. 2: 1 to below 3 months. 3: 3 to below 6 months. 4: 6 to below 12 months. 5: 12 months or more, or no alternative."
+        },
+        {
+          "name": "Critical service failure rate",
+          "weight": 0.3,
+          "formula_text": "Failure Rate % = Critical SLA(Service Level Agreement) failures ÷ Total measured critical SLA obligations × 100.",
+          "rating_thresholds_text": "1: Below 1%. 2: 1% to below 3%. 3: 3% to below 5%. 4: 5% to below 10%. 5: 10% or more, or an ongoing critical outage."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-09",
+      "parameters": [
+        {
+          "name": "Coverage dependency",
+          "weight": 0.4,
+          "formula_text": "Coverage Dependency % = Protected exposure ÷ Gross exposure × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 80%. 5: 80% or more."
+        },
+        {
+          "name": "Provider capacity burden",
+          "weight": 0.35,
+          "formula_text": "Capacity Burden % = Estimated correlated claims ÷ Provider available claims-paying capacity × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Policy-expiry proximity",
+          "weight": 0.25,
+          "formula_text": "Months to Expiry = Policy expiry date minus calculation date, converted into months.",
+          "rating_thresholds_text": "1: More than 36 months. 2: 24 to 36 months. 3: 12 to below 24 months. 4: 3 to below 12 months. 5: Below 3 months, or no replacement cover"
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-10",
+      "parameters": [
+        {
+          "name": "Sector concentration",
+          "weight": 0.4,
+          "formula_text": "Sector Concentration % = Revenue or EBITDA from sector ÷ Total revenue or EBITDA × 100. Use the most relevant measure for the business model.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Sector demand decline",
+          "weight": 0.35,
+          "formula_text": "Demand Decline % = Historical sector demand minus current sector demand ÷ Historical sector demand × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Entity resilience coverage",
+          "weight": 0.25,
+          "formula_text": "Resilience Coverage % = Unrestricted liquidity + Available committed lines ÷ Stressed 12-month cash requirement × 100.",
+          "rating_thresholds_text": "1: 150% or more. 2: 120% to below 150%. 3: 100% to below 120%. 4: 75% to below 100%. 5: Below 75%."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-11",
+      "parameters": [
+        {
+          "name": "Geographic concentration",
+          "weight": 0.4,
+          "formula_text": "Geographic Concentration % = 40% Revenue Share + 30% Asset Share + 30% Supplier or Operational Share in the geography.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Country-risk score",
+          "weight": 0.35,
+          "formula_text": "Country Risk Score = Approved sovereign, macroeconomic, transfer, political, climate, and security risk score normalized to 0 to 100.",
+          "rating_thresholds_text": "1: 0 to below 20. 2: 20 to below 40. 3: 40 to below 60. 4: 60 to below 80. 5: 80 to 100."
+        },
+        {
+          "name": "Unmitigated geographic exposure",
+          "weight": 0.25,
+          "formula_text": "Unmitigated Exposure % = Exposure not covered by insurance, hedging, or alternative operations ÷ Total geographic exposure × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 75%. 5: 75% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-12",
+      "parameters": [
+        {
+          "name": "Shipment concentration",
+          "weight": 0.4,
+          "formula_text": "Shipment Concentration % = Shipment volume or value through shared node ÷ Total shipment volume or value × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Diversion coverage",
+          "weight": 0.3,
+          "formula_text": "Diversion Coverage % = Available alternative route capacity ÷ Volume dependent on shared node × 100.",
+          "rating_thresholds_text": "1: 100% or more. 2: 75% to below 100%. 3: 50% to below 75%. 4: 25% to below 50%. 5: Below 25%."
+        },
+        {
+          "name": "Inventory buffer",
+          "weight": 0.3,
+          "formula_text": "Inventory Buffer Ratio = Inventory days available ÷ Expected disruption days.",
+          "rating_thresholds_text": "1: 3.0 or more. 2: 2.0 to below 3.0. 3: 1.0 to below 2.0. 4: 0.5 to below 1.0. 5: Below 0.5"
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-13",
+      "parameters": [
+        {
+          "name": "Commodity dependency",
+          "weight": 0.4,
+          "formula_text": "Commodity Dependency % = Commodity-related cost or revenue ÷ Total cost or revenue × 100. Select cost or revenue according to whether the entity is a consumer or producer.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 20%. 3: 20% to below 35%. 4: 35% to below 50%. 5: 50% or more."
+        },
+        {
+          "name": "Price-shock impact",
+          "weight": 0.35,
+          "formula_text": "Price-shock Impact % = Absolute stressed EBITDA reduction ÷ Base EBITDA × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Unhedged exposure",
+          "weight": 0.25,
+          "formula_text": "Unhedged Exposure % = Commodity volume or value not effectively hedged ÷ Total commodity exposure × 100.",
+          "rating_thresholds_text": "1: Below 20%. 2: 20% to below 40%. 3: 40% to below 60%. 4: 60% to below 80%. 5: 80% or more."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    },
+    {
+      "code": "L2-14",
+      "parameters": [
+        {
+          "name": "Contract or project materiality",
+          "weight": 0.4,
+          "formula_text": "Contract Materiality % = Contract revenue, project value, or committed capital ÷ Entity annual revenue or adjusted capital × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more."
+        },
+        {
+          "name": "Shared-liability ratio",
+          "weight": 0.35,
+          "formula_text": "Shared Liability % = Joint, guaranteed, or cross-default liability ÷ Total entity project exposure × 100.",
+          "rating_thresholds_text": "1: Below 10%. 2: 10% to below 25%. 3: 25% to below 50%. 4: 50% to below 80%. 5: 80% or more, or uncapped joint liability."
+        },
+        {
+          "name": "Project-delay ratio",
+          "weight": 0.25,
+          "formula_text": "Project Delay % = Actual or forecast delayed days ÷ Original project duration days × 100.",
+          "rating_thresholds_text": "1: Below 5%. 2: 5% to below 10%. 3: 10% to below 20%. 4: 20% to below 35%. 5: 35% or more, project default, or termination."
+        }
+      ],
+      "source": "CONNECTED COUNTERPARTY Methodology 2.docx"
+    }
+  ],
+  "stress_weights": {
+    "financial_liquidity": 0.4,
+    "credit_market": 0.35,
+    "operational_legal_reputation": 0.25
+  },
+  "confidence_weights": {
+    "source_quality": 0.5,
+    "data_freshness": 0.3,
+    "verification_status": 0.2
+  },
+  "final_weights": {
+    "standalone": 0.45,
+    "network": 0.35,
+    "concentration": 0.1,
+    "event": 0.1
+  },
+  "connectivity_weights": {
+    "direct": 0.4,
+    "indirect": 0.3,
+    "diversity": 0.3
+  },
+  "contagion_weights": {
+    "exposure_concentration": 0.35,
+    "connectivity": 0.35,
+    "connected_stress": 0.3
+  },
+  "committee_weights": {
+    "final": 0.4,
+    "contagion": 0.3,
+    "concentration": 0.2,
+    "event": 0.1
+  },
+  "scenario_severity_weights": {
+    "trigger_stress": 0.4,
+    "connectivity": 0.35,
+    "contagion": 0.25
+  },
+  "early_warning": {
+    "turnover_decline_thresholds": [
+      10,
+      20,
+      35
+    ],
+    "sector_stress_weights": {
+      "industry_default_rate": 0.5,
+      "rating_downgrades": 0.3,
+      "market_indicators": 0.2
+    },
+    "sector_stress_thresholds": [
+      25,
+      50,
+      75
+    ]
+  },
+  "network_formula": "100 * (1 - product(1 - contribution_i / 100))",
+  "final_formula": "0.45 * standalone + 0.35 * network + 0.10 * concentration + 0.10 * event",
+  "relationship_bands": [
+    [
+      0,
+      "Weak"
+    ],
+    [
+      20,
+      "Moderate"
+    ],
+    [
+      40,
+      "Material"
+    ],
+    [
+      60,
+      "Strong"
+    ],
+    [
+      80,
+      "Critical"
+    ]
+  ],
+  "final_bands": [
+    [
+      0,
+      "Low"
+    ],
+    [
+      20,
+      "Moderate"
+    ],
+    [
+      40,
+      "Elevated"
+    ],
+    [
+      60,
+      "High"
+    ],
+    [
+      80,
+      "Critical"
+    ]
+  ],
+  "direction_factors": {
+    "direct": 1.0,
+    "strong_indirect": 0.75,
+    "moderate_indirect": 0.5,
+    "weak_ancillary": 0.25
+  },
+  "exposure_factors": [
+    [
+      0,
+      0.75
+    ],
+    [
+      10,
+      0.9
+    ],
+    [
+      25,
+      1.0
+    ],
+    [
+      50,
+      1.1
+    ],
+    [
+      75,
+      1.25
+    ]
+  ],
+  "scenario_material_threshold": 25,
+  "main_graph_depth": 2
+}

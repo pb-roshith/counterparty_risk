@@ -1,0 +1,24 @@
+# Credentials and machine-specific settings
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local databases and generated agent state
+backend/data/
+*.sqlite3
+
+# Frontend dependencies and build output
+node_modules/
+dist/
+
+# Logs and editor files
+*.log
+.vscode/
+.idea/

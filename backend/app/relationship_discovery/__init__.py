@@ -1,0 +1,1 @@
+"""Registered relationship detector strategies."""
