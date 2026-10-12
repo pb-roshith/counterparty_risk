@@ -75,7 +75,7 @@ export function ExposureColumnChart({
 }) {
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <BarChart data={data} margin={{ left: 0, right: 8, top: 8, bottom: 4 }}>
+      <BarChart data={data} margin={{ left: 20, right: 8, top: 8, bottom: 4 }}>
         <XAxis
           dataKey="label"
           tickLine={false}
@@ -85,7 +85,10 @@ export function ExposureColumnChart({
         <YAxis
           tickLine={false}
           axisLine={false}
-          width={44}
+          width={76}
+          domain={[0, "auto"]}
+          tickFormatter={(value: number) => `${value.toLocaleString("en-IN")} Cr`}
+          label={{ value: "Exposure (₹ crore)", angle: -90, position: "insideLeft", offset: -14, style: { fontSize: 11, fill: "var(--muted-foreground)" } }}
           tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
         />
         <Tooltip content={<TooltipBox />} cursor={{ fill: "var(--surface-muted)" }} />

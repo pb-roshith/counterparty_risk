@@ -13,7 +13,6 @@ const ExposurePage = lazy(() => import("@/routes/exposure").then((m) => ({ defau
 const AssetsPage = lazy(() => import("@/routes/assets").then((m) => ({ default: m.AssetsPage })));
 const ContagionPage = lazy(() => import("@/routes/contagion").then((m) => ({ default: m.ContagionPage })));
 const EarlyWarningPage = lazy(() => import("@/routes/early-warning").then((m) => ({ default: m.EarlyWarningPage })));
-const EvidencePage = lazy(() => import("@/routes/evidence").then((m) => ({ default: m.EvidencePage })));
 const ManufactureDataPage = lazy(() => import("@/routes/manufacture-data").then((m) => ({ default: m.ManufactureDataPage })));
 
 const titles: Record<string, string> = {
@@ -26,7 +25,6 @@ const titles: Record<string, string> = {
   "/assets": "Assets & Recovery",
   "/contagion": "Contagion Risk",
   "/early-warning": "Early Warning Indicators",
-  "/evidence": "Evidence & Sources",
   "/manufacture-data": "Manufacture Data",
 };
 
@@ -71,7 +69,6 @@ function PortfolioContent() {
           <Route path="/assets" element={<AssetsPage />} />
           <Route path="/contagion" element={<ContagionPage />} />
           <Route path="/early-warning" element={<EarlyWarningPage />} />
-          <Route path="/evidence" element={<EvidencePage />} />
           <Route path="/manufacture-data" element={<ManufactureDataPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>;

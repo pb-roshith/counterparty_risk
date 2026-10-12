@@ -1,9 +1,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { confidenceLabel, formatMoney, formatPct } from "@/lib/risk";
+import { confidenceLabel, formatPct } from "@/lib/risk";
 import { DemoBadge, PageHeader, ProvenanceTag, Section } from "@/components/common/primitives";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RelationshipGraph, type GraphFilters } from "@/components/graph/RelationshipGraph";
 import { edgeDetail, nodeDetail, relationshipDetail } from "@/lib/detail";
 import { entityLabel } from "@/data/demo";
@@ -12,14 +13,19 @@ import { useAppState } from "@/state/app-state";
 export function RelationshipsPage() {
   const { dossier, openDetail } = useAppState();
   const [selectedDirectId, setSelectedDirectId] = useState<string | null>(null);
+  const [selectedRelationType, setSelectedRelationType] = useState("ALL");
+  const [graphLevel, setGraphLevel] = useState<"LEVEL_1" | "LEVEL_2">("LEVEL_1");
 
   useEffect(() => {
     setSelectedDirectId(null);
+    setSelectedRelationType("ALL");
+    setGraphLevel("LEVEL_1");
   }, [dossier.company.id]);
 
   const filters: GraphFilters = { levels: "ALL", riskLevels: [] };
 
   const directRows = useMemo(() => dossier.relationships.filter((row) => row.level === "LEVEL_1"), [dossier.relationships]);
+  const relationTypes = useMemo(() => [...new Set(directRows.map((row) => row.type))].sort(), [directRows]);
   const directNodes = useMemo(() => {
     const ids = new Set(directRows.map((row) => row.entityA === dossier.graph.centerId ? row.entityB : row.entityA));
     return dossier.graph.nodes.filter((node) => ids.has(node.id));
@@ -30,8 +36,10 @@ export function RelationshipsPage() {
   ) : [], [dossier.relationships, selectedDirectId]);
   const visibleDirectRows = useMemo(() => selectedDirectId ? directRows.filter(
     (row) => row.entityA === selectedDirectId || row.entityB === selectedDirectId,
-  ) : directRows, [directRows, selectedDirectId]);
-  const rows = useMemo(() => [...visibleDirectRows, ...expandedRows], [visibleDirectRows, expandedRows]);
+  ) : directRows.filter((row) => selectedRelationType === "ALL" || row.type === selectedRelationType), [directRows, selectedDirectId, selectedRelationType]);
+  const rows = useMemo(() => graphLevel === "LEVEL_2"
+    ? dossier.relationships.filter((row) => row.level === "LEVEL_1" || row.level === "LEVEL_2")
+    : [...visibleDirectRows, ...expandedRows], [graphLevel, dossier.relationships, visibleDirectRows, expandedRows]);
 
   const graphData = useMemo(() => {
     const relationshipIds = new Set(rows.map((row) => row.relationshipId));
@@ -57,17 +65,46 @@ export function RelationshipsPage() {
       />
 
       <p className="text-sm text-muted-foreground">
-        {selectedDirectNode
+        {graphLevel === "LEVEL_2"
+          ? "Showing all Level 1 and Level 2 relationships."
+          : selectedDirectNode
           ? `Showing ${expandedRows.length} further relationship${expandedRows.length === 1 ? "" : "s"} for ${selectedDirectNode.label}. Use Back to Level 1 to choose another node.`
           : "Showing Level 1 relationships. Select a direct node to expand its relationships."}
       </p>
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-1" role="group" aria-label="Graph level">
+          {(["LEVEL_1", "LEVEL_2"] as const).map((level) => (
+            <Button key={level} size="sm" variant={graphLevel === level ? "default" : "outline"}
+              aria-pressed={graphLevel === level}
+              onClick={() => { setGraphLevel(level); setSelectedDirectId(null); }}>
+              {level === "LEVEL_1" ? "Level 1" : "Level 2"}
+            </Button>
+          ))}
+        </div>
+      {graphLevel === "LEVEL_1" && !selectedDirectId && (
+        <>
+          <label htmlFor="relation-type-filter" className="text-sm font-medium">Relation type</label>
+          <Select value={selectedRelationType} onValueChange={setSelectedRelationType}>
+            <SelectTrigger id="relation-type-filter" className="w-[240px] bg-surface">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All relations</SelectItem>
+              {relationTypes.map((type) => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </>
+      )}
+      </div>
       <RelationshipGraph
-        key={`${dossier.company.id}-${selectedDirectId ?? "level-1"}`}
+        key={`${dossier.company.id}-${graphLevel}-${selectedDirectId ?? "all"}`}
         data={graphData}
         mode="RELATIONSHIP"
+        layout={graphLevel === "LEVEL_2" ? "clusters" : "radial"}
+        height={graphLevel === "LEVEL_2" ? 800 : 620}
         filters={filters}
         onSelectNode={(node) => {
-          if (directNodeIds.has(node.id)) {
+          if (graphLevel === "LEVEL_1" && directNodeIds.has(node.id)) {
             setSelectedDirectId(node.id);
           } else {
             openDetail(nodeDetail(node));
@@ -78,7 +115,7 @@ export function RelationshipsPage() {
 
       <Section
         title={`Relationship register · ${rows.length}`}
-        description="Every mapped relationship with strength, dependency, confidence and source."
+        description="Every mapped relationship with strength, confidence and source."
         actions={<ProvenanceTag provenance={dossier.company.provenance} />}
         dense
       >
@@ -91,8 +128,6 @@ export function RelationshipsPage() {
                 <th className="label-caps px-4 py-2">Entity B</th>
                 <th className="label-caps px-4 py-2">Level</th>
                 <th className="label-caps px-4 py-2 text-right">Strength</th>
-                <th className="label-caps px-4 py-2 text-right">Dependency</th>
-                <th className="label-caps px-4 py-2 text-right">Exposure</th>
                 <th className="label-caps px-4 py-2">Confidence</th>
                 <th className="label-caps px-4 py-2">Refreshed</th>
               </tr>
@@ -113,8 +148,6 @@ export function RelationshipsPage() {
                   <td className="px-4 py-2.5 font-medium text-foreground">{dossier.graph.nodes.find((node) => node.id === rel.entityB)?.label ?? entityLabel(rel.entityB)}</td>
                   <td className="px-4 py-2.5 text-xs">{rel.level.replace("_", " ")}</td>
                   <td className="num px-4 py-2.5 text-right">{formatPct(rel.strength)}</td>
-                  <td className="num px-4 py-2.5 text-right">{formatPct(rel.dependency)}</td>
-                  <td className="num px-4 py-2.5 text-right">{formatMoney(rel.exposure)}</td>
                   <td className="px-4 py-2.5 text-xs">{confidenceLabel[rel.confidence]}</td>
                   <td className="num px-4 py-2.5 text-xs text-muted-foreground">{rel.lastRefreshed}</td>
                 </tr>

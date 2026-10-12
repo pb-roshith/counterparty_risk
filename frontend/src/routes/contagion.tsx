@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-import { formatMoney, formatPct } from "@/lib/risk";
 import { DemoBadge, MetricCard, PageHeader, ProvenanceTag } from "@/components/common/primitives";
 import { useAppState } from "@/state/app-state";
 
@@ -25,7 +24,6 @@ export function ContagionPage() {
     </nav>
   );
 
-  const totalAtRisk = paths.reduce((sum, p) => sum + p.exposure.amount, 0);
 
   return (
     <div className="space-y-5">
@@ -36,15 +34,10 @@ export function ContagionPage() {
         actions={<DemoBadge />}
       />
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2">
         <MetricCard label="Transmission paths" value={paths.length} accent />
         <MetricCard
-          label="Sum of path exposures"
-          money={{ amount: totalAtRisk, currency: "INR", unit: "Cr" }}
-          provenance="CALCULATED"
-        />
-        <MetricCard
-          label="Direct bank exposure"
+          label="Total exposure"
           money={dossier.exposure.total}
           provenance={dossier.exposure.provenance}
         />
@@ -62,14 +55,6 @@ export function ContagionPage() {
                   <p className="text-sm font-semibold text-foreground">{path.transmissionChannel}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-4 text-xs">
-                  <span className="num">
-                    <span className="label-caps mr-1.5">Exposure</span>
-                    {formatMoney(path.exposure)}
-                  </span>
-                  <span className="num">
-                    <span className="label-caps mr-1.5">Dependency</span>
-                    {formatPct(path.dependency)}
-                  </span>
                   <ProvenanceTag provenance={path.provenance} />
                 </div>
               </header>

@@ -2,7 +2,6 @@ import { useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router";
 import {
   AlertTriangle,
-  BadgeCheck,
   Bell,
   Building2,
   ChevronsUpDown,
@@ -46,7 +45,6 @@ const nav = [
   { to: "/assets", label: "Assets & Recovery", icon: Vault },
   { to: "/contagion", label: "Contagion Risk", icon: ShieldAlert },
   { to: "/early-warning", label: "Early Warning Indicators", icon: Signal },
-  { to: "/evidence", label: "Evidence & Sources", icon: BadgeCheck },
   { to: "/manufacture-data", label: "Manufacture Data", icon: DatabaseZap },
 ] as const;
 

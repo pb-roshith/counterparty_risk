@@ -79,11 +79,10 @@ export function CounterpartiesPage() {
             <thead>
               <tr className="border-b border-border bg-surface-muted text-left">
                 <th className="label-caps px-4 py-2">Counterparty</th>
-                <th className="label-caps px-4 py-2">LEI / Customer ID</th>
                 <th className="label-caps px-4 py-2">Country</th>
                 <th className="label-caps px-4 py-2">Sector</th>
                 <th className="label-caps px-4 py-2">Relationship</th>
-                <th className="label-caps px-4 py-2 text-right">Exposure</th>
+                <th className="label-caps px-4 py-2 text-right">Total exposure</th>
                 <th className="label-caps px-4 py-2 text-right">Score</th>
                 <th className="label-caps px-4 py-2">Risk</th>
                 <th className="px-4 py-2" />
@@ -107,11 +106,6 @@ export function CounterpartiesPage() {
                         <p className="text-[11px] text-muted-foreground">{company.identity.industry}</p>
                       </div>
                     </div>
-                  </td>
-                  <td className="num px-4 py-3 text-xs text-muted-foreground">
-                    {company.identity.lei}
-                    <br />
-                    {company.customerId}
                   </td>
                   <td className="px-4 py-3 text-xs">{company.identity.country}</td>
                   <td className="px-4 py-3 text-xs">{company.identity.sector}</td>

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Banknote,
   Boxes,
@@ -61,6 +61,7 @@ export function RelationshipGraph({
   onSelectNode,
   onSelectEdge,
   height = 620,
+  layout = "radial",
   className,
 }: {
   data: RelationshipGraphData;
@@ -69,17 +70,70 @@ export function RelationshipGraph({
   onSelectNode?: (node: GraphNode) => void;
   onSelectEdge?: (edge: GraphEdge) => void;
   height?: number;
+  layout?: "radial" | "clusters";
   className?: string;
 }) {
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(layout === "clusters" ? 1.8 : 1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const drag = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null);
   const suppressClick = useRef(false);
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
-  const W = 1000;
-  const H = 620;
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      setZoom((value) => Math.max(0.25, Math.min(12, value * Math.exp(-event.deltaY * 0.002))));
+    };
+    svg.addEventListener("wheel", handleWheel, { passive: false });
+    return () => svg.removeEventListener("wheel", handleWheel);
+  }, []);
+
+  const branchLayout = useMemo(() => {
+    if (layout !== "clusters") return null;
+    const directIds = new Set(data.edges.filter((edge) => edge.from === data.centerId || edge.to === data.centerId)
+      .map((edge) => edge.from === data.centerId ? edge.to : edge.from));
+    const direct = data.nodes.filter((node) => directIds.has(node.id));
+    const groups = direct.map((node) => ({ node, children: [] as GraphNode[] }));
+    for (const node of data.nodes) {
+      if (node.id === data.centerId || directIds.has(node.id)) continue;
+      const group = groups.find(({ node: parent }) => data.edges.some((edge) =>
+        (edge.from === parent.id && edge.to === node.id) || (edge.to === parent.id && edge.from === node.id)));
+      if (group) group.children.push(node);
+    }
+    const unlinked = data.nodes.filter((node) => node.id !== data.centerId && !directIds.has(node.id)
+      && !groups.some((group) => group.children.some((child) => child.id === node.id)));
+    const clusterRadius = Math.max(170, ...groups.map((group) => group.children.length * 190 / (Math.PI * 1.5)));
+    const groupCount = groups.length + (unlinked.length ? 1 : 0);
+    // Keep neighboring satellite clusters apart and leave room around the center.
+    const parentRadius = Math.max(clusterRadius + 230,
+      groupCount > 1 ? (clusterRadius + 130) / Math.sin(Math.PI / Math.max(2, groupCount)) : 0);
+    const size = Math.ceil((parentRadius + clusterRadius + 160) * 2);
+    const center = size / 2;
+    const positions = new Map<string, { x: number; y: number }>();
+    groups.forEach(({ node, children }, groupIndex) => {
+      const angle = -Math.PI / 2 + groupIndex * 2 * Math.PI / Math.max(1, groupCount);
+      const parent = { x: center + parentRadius * Math.cos(angle), y: center + parentRadius * Math.sin(angle) };
+      positions.set(node.id, parent);
+      children.forEach((child, index) => {
+        // Fan satellites around their parent, leaving the inward connection clear.
+        const childAngle = angle + (children.length === 1 ? 0 : -Math.PI * 0.75 + index * Math.PI * 1.5 / (children.length - 1));
+        positions.set(child.id, { x: parent.x + clusterRadius * Math.cos(childAngle), y: parent.y + clusterRadius * Math.sin(childAngle) });
+      });
+    });
+    unlinked.forEach((node, index) => {
+      const angle = -Math.PI / 2 + groups.length * 2 * Math.PI / Math.max(1, groupCount);
+      positions.set(node.id, { x: center + parentRadius * Math.cos(angle) + (index % 3 - 1) * 180,
+        y: center + parentRadius * Math.sin(angle) + Math.floor(index / 3) * 150 });
+    });
+    positions.set(data.centerId, { x: center, y: center });
+    return { positions, height: size };
+  }, [data, layout]);
+  const W = branchLayout?.height ?? 1000;
+  const H = branchLayout?.height ?? 620;
 
   const visibleNodes = useMemo(() => {
     return data.nodes.filter((n) => {
@@ -112,6 +166,7 @@ export function RelationshipGraph({
   );
 
   const positions = useMemo(() => {
+    if (branchLayout) return branchLayout.positions;
     const directIds = new Set(data.edges.filter((edge) => edge.from === data.centerId || edge.to === data.centerId)
       .map((edge) => edge.from === data.centerId ? edge.to : edge.from));
     const direct = data.nodes.filter((node) => directIds.has(node.id));
@@ -134,11 +189,14 @@ export function RelationshipGraph({
       });
     }
     return result;
-  }, [data]);
+  }, [data, branchLayout, W, H]);
   const pos = (n: GraphNode) => positions.get(n.id) ?? { x: W / 2, y: H / 2 };
 
   const nodeRadius = (n: GraphNode) => {
-    const base = n.id === data.centerId ? 46 : 16 + n.weight * 18;
+    const weight = Math.max(0, Math.min(1, n.weight));
+    const base = layout === "clusters"
+      ? n.id === data.centerId ? 76 : n.level === "LEVEL_1" ? 44 + weight * 12 : 16 + weight * 18
+      : n.id === data.centerId ? 46 : 16 + n.weight * 18;
     if (mode === "EXPOSURE" && n.exposure) return base + Math.min(18, n.exposure.amount / 30);
     return base;
   };
@@ -147,7 +205,9 @@ export function RelationshipGraph({
     mode === "RELATIONSHIP" || mode === "OWNERSHIP" ? "var(--border-strong)" : riskStyle(e.riskLevel).color;
 
   const nodeColor = (n: GraphNode) =>
-    mode === "RELATIONSHIP" ? "var(--chart-1)" : riskStyle(n.riskLevel).color;
+    layout === "clusters" && n.id !== data.centerId && n.level === "LEVEL_1"
+      ? "#eab308"
+      : mode === "RELATIONSHIP" ? "var(--chart-1)" : riskStyle(n.riskLevel).color;
 
   const fit = () => {
     setZoom(1);
@@ -161,16 +221,16 @@ export function RelationshipGraph({
       {/* graph controls */}
       <div className="absolute right-3 top-3 z-10 flex flex-col gap-1.5">
         <div className="flex w-8 flex-col overflow-hidden rounded-md border border-border bg-surface shadow-panel">
-          <Button variant="ghost" size="icon" className="!size-8 shrink-0 rounded-none p-0" onClick={() => setZoom((z) => Math.min(2.4, z + 0.2))} aria-label="Zoom in">
+          <Button variant="ghost" size="icon" className="!size-8 shrink-0 rounded-none p-0" onClick={() => setZoom((z) => Math.min(12, z * 1.3))} aria-label="Zoom in">
             <Plus className="size-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="!size-8 shrink-0 rounded-none border-t border-border p-0" onClick={() => setZoom((z) => Math.max(0.5, z - 0.2))} aria-label="Zoom out">
+          <Button variant="ghost" size="icon" className="!size-8 shrink-0 rounded-none border-t border-border p-0" onClick={() => setZoom((z) => Math.max(0.25, z / 1.3))} aria-label="Zoom out">
             <Minus className="size-4" />
           </Button>
           <Button variant="ghost" size="icon" className="!size-8 shrink-0 rounded-none border-t border-border p-0" onClick={fit} aria-label="Fit to screen">
             <Maximize2 className="size-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="!size-8 shrink-0 rounded-none border-t border-border p-0" onClick={() => { fit(); setCollapsed(false); }} aria-label="Reset">
+          <Button variant="ghost" size="icon" className="!size-8 shrink-0 rounded-none border-t border-border p-0" onClick={() => { setZoom(layout === "clusters" ? 1.8 : 1); setPan({ x: 0, y: 0 }); setCollapsed(false); }} aria-label="Reset">
             <RotateCcw className="size-4" />
           </Button>
         </div>
@@ -185,7 +245,9 @@ export function RelationshipGraph({
         </Button>
       </div>
 
+      <div className="relative" style={{ height }}>
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
         style={{ height, touchAction: "none" }}
         className="relative w-full cursor-grab active:cursor-grabbing"
@@ -206,11 +268,12 @@ export function RelationshipGraph({
           }
           if (!suppressClick.current) return;
           const bounds = event.currentTarget.getBoundingClientRect();
-          setPan({ x: drag.current.panX + dx * W / bounds.width, y: drag.current.panY + dy * H / bounds.height });
+          const scale = Math.min(bounds.width / W, bounds.height / H);
+          setPan({ x: drag.current.panX + dx / scale, y: drag.current.panY + dy / scale });
         }}
         onPointerUp={() => { drag.current = null; }}
         onPointerCancel={() => { drag.current = null; }}
-        onDoubleClick={() => setZoom((value) => Math.min(2.4, value + 0.3))}
+        onDoubleClick={() => setZoom((value) => Math.min(12, value * 1.5))}
       >
         <g transform={`translate(${W / 2 + pan.x} ${H / 2 + pan.y}) scale(${zoom}) translate(${-W / 2} ${-H / 2})`}>
           {visibleEdges.map((e) => {
@@ -226,8 +289,11 @@ export function RelationshipGraph({
             const parallelIndex = parallel.findIndex((other) => other.id === e.id);
             const my = (p1.y + p2.y) / 2 + (parallelIndex - (parallel.length - 1) / 2) * 23;
             const active = hovered === e.id;
+            const directConnection = e.from === data.centerId || e.to === data.centerId;
             const width =
-              mode === "EXPOSURE"
+              mode === "RELATIONSHIP" && directConnection
+                ? 1.5 + Math.max(0, Math.min(1, e.strength)) * 7
+                : mode === "EXPOSURE"
                 ? 1 + (e.strength * 5)
                 : mode === "CONTAGION"
                   ? 1.5 + e.strength * 3.5
@@ -241,12 +307,14 @@ export function RelationshipGraph({
                   y2={p2.y}
                   stroke={edgeColor(e)}
                   strokeWidth={active ? width + 2 : width}
+                  vectorEffect="non-scaling-stroke"
                   strokeOpacity={active ? 0.95 : 0.55}
                   strokeDasharray={e.type === "DEPENDS ON" ? "6 5" : undefined}
                   className="cursor-pointer"
                   onClick={() => { if (!suppressClick.current) onSelectEdge?.(e); }}
                 />
-                {(
+                <title>{`${e.type} · Strength: ${Math.round(e.strength * 100)}%`}</title>
+                {(!branchLayout || active) && (
                   <>
                     <rect
                       x={mx - e.type.length * 3.4 - 6}
@@ -336,8 +404,10 @@ export function RelationshipGraph({
           })}
         </g>
       </svg>
+      </div>
 
       <div className="pointer-events-none absolute bottom-3 left-4 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
+        <span>Scroll to zoom · Drag to pan{mode === "RELATIONSHIP" ? " · Thicker center links = stronger relationships" : ""}</span>
         <span className="font-semibold uppercase tracking-wider">
           {visibleNodes.length} entities · {visibleEdges.length} relationships
         </span>

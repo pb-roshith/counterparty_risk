@@ -9,7 +9,7 @@ import {
 } from "react";
 
 import { DEFAULT_COUNTERPARTY_ID, getDossier } from "@/data/demo";
-import { assessDemoCategories, fetchManufacturedCounterparties, fetchRiskSummary,
+import { assessDemoCategories, deleteCounterparty as deleteCounterpartyRecord, fetchManufacturedCounterparties, fetchRiskSummary,
   type BackendRiskSummary, type DemoCategoryAssessment, type ManufacturedCounterparty } from "@/lib/api";
 import type { Company, ContagionPath, CounterpartyDossier, Provenance, RiskLevel } from "@/types/risk";
 
@@ -81,6 +81,7 @@ interface AppState {
   counterparties: Company[];
   manufactured: ManufacturedCounterparty[];
   refreshManufactured: () => Promise<void>;
+  deleteCounterparty: (id: string) => Promise<void>;
   dossierFor: (id: string) => CounterpartyDossier;
 
   detail: DetailPayload | null;
@@ -108,6 +109,14 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => { void refreshManufactured().catch(console.warn); }, [refreshManufactured]);
+
+  const deleteCounterparty = useCallback(async (id: string) => {
+    await deleteCounterpartyRecord(id);
+    const remaining = manufactured.filter((record) => record.company.id !== id);
+    setManufactured(remaining);
+    setCounterpartyId((current) => current === id ? (remaining[0]?.company.id ?? "") : current);
+    setDetail(null);
+  }, [manufactured]);
 
   const dossierFor = useCallback((id: string): CounterpartyDossier => {
     const generated = manufactured.find((record) => record.company.id === id);
@@ -218,6 +227,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       counterparties: manufactured.map((record) => record.company),
       manufactured,
       refreshManufactured,
+      deleteCounterparty,
       dossierFor,
       detail,
       openDetail,
@@ -225,7 +235,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       selectorOpen,
       setSelectorOpen,
     }),
-    [counterpartyId, dossier, manufactured, refreshManufactured, dossierFor, detail, openDetail, closeDetail, selectorOpen],
+    [counterpartyId, dossier, manufactured, refreshManufactured, deleteCounterparty, dossierFor, detail, openDetail, closeDetail, selectorOpen],
   );
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;

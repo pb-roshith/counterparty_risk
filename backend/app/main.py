@@ -119,7 +119,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Connected Counterparty Risk API", version="0.1.0", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=os.getenv("CORS_ORIGINS", "http://127.0.0.1:8080,http://localhost:8080").split(","), allow_credentials=False, allow_methods=["GET", "POST", "PATCH"], allow_headers=["X-API-Key", "Content-Type"])
+app.add_middleware(CORSMiddleware, allow_origins=os.getenv("CORS_ORIGINS", "http://127.0.0.1:8080,http://localhost:8080").split(","), allow_credentials=False, allow_methods=["GET", "POST", "PATCH", "DELETE"], allow_headers=["X-API-Key", "Content-Type"])
 
 
 def services():
@@ -239,6 +239,25 @@ def manufacture_counterparties(payload: ManufactureRequest, request: Request, s:
         load_manufactured_record(s.graph, s.exposures, s.risk_inputs, record)
     s.metadata.audit("local-user", "manufacture_counterparties", batch_id, {"count": payload.count})
     return {"batch_id": batch_id, "created_count": len(records), "entity_ids": [row["entity"]["canonical_entity_id"] for row in records]}
+
+
+@app.delete("/api/counterparties/{entity_id}", status_code=204)
+def delete_counterparty(entity_id: str, request: Request, s: Services = Depends(services)):
+    if not request.client or request.client.host not in ("127.0.0.1", "::1", "testclient"):
+        require_write_access(request.headers.get("X-API-Key"))
+    if not any(row["entity_id"] == entity_id for row in s.metadata.manufactured_index()):
+        raise HTTPException(404, "Counterparty not found")
+    if s.neo4j:
+        s.neo4j.delete_counterparty(entity_id)
+    s.metadata.delete_counterparty(entity_id)
+    s.graph.entities.pop(entity_id, None)
+    s.graph.relationships = {key: edge for key, edge in s.graph.relationships.items()
+                            if entity_id not in (edge.source_entity_id, edge.target_entity_id)}
+    s.graph.record_links = {key: value for key, value in s.graph.record_links.items() if value != entity_id}
+    s.exposures[:] = [item for item in s.exposures if item.entity_id != entity_id]
+    s.risk_inputs.pop(entity_id, None)
+    s.metadata.audit("local-user", "delete_counterparty", entity_id, {})
+    return Response(status_code=204)
 
 
 @app.get("/api/counterparties/{entity_id}")

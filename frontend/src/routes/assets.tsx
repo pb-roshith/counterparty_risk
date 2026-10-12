@@ -3,26 +3,27 @@
 import { formatMoney } from "@/lib/risk";
 import { DemoBadge, MetricCard, PageHeader, ProvenanceTag, Section } from "@/components/common/primitives";
 import { assetDetail } from "@/lib/detail";
+import { metricDetail } from "@/lib/metric-detail";
+import { Button } from "@/components/ui/button";
 import { useAppState } from "@/state/app-state";
 
 
-const encumbranceLabel: Record<string, string> = {
-  UNENCUMBERED: "Unencumbered",
-  PARTIALLY_ENCUMBERED: "Partially encumbered",
-  ENCUMBERED: "Encumbered",
-};
-
 export function AssetsPage() {
-  const { dossier, openDetail } = useAppState();
+  const { dossier, manufactured, openDetail } = useAppState();
   const { assets, recovery } = dossier;
+  const showRecoveryFormula = () => {
+    const detail = metricDetail("Assets and recovery", dossier, manufactured.find((record) => record.company.id === dossier.company.id));
+    if (detail) openDetail(detail);
+  };
 
   return (
     <div className="space-y-5">
       <PageHeader
         eyebrow="Assets and recovery"
         title="What could be recovered"
+        onTitleClick={showRecoveryFormula}
         description="Assets available to the bank, how much of them is pledged, and the recovery estimate after haircuts."
-        actions={<DemoBadge />}
+        actions={<><DemoBadge /><Button variant="outline" size="sm" onClick={showRecoveryFormula}>View recovery formula</Button></>}
       />
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
@@ -40,7 +41,7 @@ export function AssetsPage() {
 
       <Section
         title="Asset register"
-        description="Click an asset for valuation, ownership and encumbrance detail."
+        description="Click an asset for valuation and ownership detail."
         actions={<ProvenanceTag provenance="OBSERVED" />}
         dense
       >
@@ -54,8 +55,6 @@ export function AssetsPage() {
                 <th className="label-caps px-4 py-2 text-right">Gross value</th>
                 <th className="label-caps px-4 py-2 text-right">Haircut</th>
                 <th className="label-caps px-4 py-2 text-right">Collateral value</th>
-                <th className="label-caps px-4 py-2">Encumbrance</th>
-                <th className="label-caps px-4 py-2 text-right">Priority</th>
               </tr>
             </thead>
             <tbody>
@@ -71,8 +70,6 @@ export function AssetsPage() {
                   <td className="num px-4 py-2.5 text-right">{formatMoney(a.value)}</td>
                   <td className="num px-4 py-2.5 text-right">{a.haircutPct}%</td>
                   <td className="num px-4 py-2.5 text-right font-medium">{formatMoney(a.collateralValue)}</td>
-                  <td className="px-4 py-2.5 text-xs">{encumbranceLabel[a.encumbrance]}</td>
-                  <td className="num px-4 py-2.5 text-right">{a.recoveryPriority}</td>
                 </tr>
               ))}
             </tbody>

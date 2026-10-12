@@ -1,3 +1,5 @@
+import { useAppState } from "@/state/app-state";
+import { metricDetail } from "@/lib/metric-detail";
 import { cn } from "@/lib/utils";
 import { riskStyle } from "@/lib/risk";
 import type { RiskLevel } from "@/types/risk";
@@ -19,6 +21,8 @@ export function RiskGauge({
   label?: string;
   className?: string;
 }) {
+  const { dossier, openDetail } = useAppState();
+  const calculation = metricDetail("Overall risk", dossier);
   const s = riskStyle(level);
   const stroke = Math.max(10, size * 0.075);
   const r = (size - stroke) / 2;
@@ -43,7 +47,7 @@ export function RiskGauge({
   ];
 
   return (
-    <div className={cn("flex flex-col items-center", className)}>
+    <button type="button" aria-label="Overall risk: view formula" onClick={() => calculation && openDetail(calculation)} className={cn("flex flex-col items-center cursor-pointer rounded-md focus-visible:outline-2 focus-visible:outline-primary", className)}>
       <svg width={size} height={size / 2 + stroke} viewBox={`0 0 ${size} ${size / 2 + stroke}`}>
         {bands.map(([from, to, lvl]) => (
           <path
@@ -83,6 +87,6 @@ export function RiskGauge({
         </p>
         {label && <p className="mt-1 text-xs text-muted-foreground">{label}</p>}
       </div>
-    </div>
+    </button>
   );
 }

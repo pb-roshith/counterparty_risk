@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
 
+import { useAppState } from "@/state/app-state";
+import { metricDetail } from "@/lib/metric-detail";
+
 import { cn } from "@/lib/utils";
 import { formatMoney, provenanceLabel, riskStyle, trendGlyph } from "@/lib/risk";
 import type { Money, Provenance, RiskLevel, Trend } from "@/types/risk";
@@ -125,13 +128,18 @@ export function MetricCard({
   accent?: boolean;
 }) {
   const s = level ? riskStyle(level) : null;
-  const Comp = onClick ? "button" : "div";
+  const { dossier, manufactured, openDetail } = useAppState();
+  const calculation = metricDetail(label, dossier, manufactured.find((record) => record.company.id === dossier.company.id));
+  const handleClick = onClick ?? (calculation ? () => openDetail(calculation) : undefined);
+  const Comp = handleClick ? "button" : "div";
   return (
     <Comp
-      onClick={onClick}
+      onClick={handleClick}
+      type={handleClick ? "button" : undefined}
+      title={calculation ? "View formula and inputs" : undefined}
       className={cn(
         "panel group relative overflow-hidden p-4 text-left",
-        onClick && "cursor-pointer transition-shadow hover:shadow-raised",
+        handleClick && "cursor-pointer transition-shadow hover:shadow-raised focus-visible:outline-2 focus-visible:outline-primary",
         className,
       )}
     >
@@ -202,17 +210,19 @@ export function PageHeader({
   title,
   description,
   actions,
+  onTitleClick,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   actions?: ReactNode;
+  onTitleClick?: () => void;
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
-        {eyebrow && <p className="label-caps">{eyebrow}</p>}
-        <h1 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{title}</h1>
+        {eyebrow && <p className="label-caps">{onTitleClick ? <button type="button" onClick={onTitleClick} className="cursor-pointer hover:text-primary focus-visible:outline-2 focus-visible:outline-primary" title="View formula and inputs">{eyebrow}</button> : eyebrow}</p>}
+        <h1 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{onTitleClick ? <button type="button" onClick={onTitleClick} className="cursor-pointer text-left hover:text-primary focus-visible:outline-2 focus-visible:outline-primary" title="View formula and inputs">{title}</button> : title}</h1>
         {description && (
           <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{description}</p>
         )}
@@ -256,6 +266,8 @@ export function KeyValueList({
   columns?: 1 | 2 | 3;
   className?: string;
 }) {
+  const { dossier, manufactured, openDetail } = useAppState();
+  const record = manufactured.find((item) => item.company.id === dossier.company.id);
   return (
     <dl
       className={cn(
@@ -266,15 +278,21 @@ export function KeyValueList({
         className,
       )}
     >
-      {items.map((item) => (
+      {items.map((item) => {
+        const calculation = metricDetail(item.label, dossier, record);
+        return (
         <div
           key={item.label}
           className="flex items-baseline justify-between gap-4 border-b border-border/70 py-2 last:border-b-0"
         >
-          <dt className="text-xs text-muted-foreground">{item.label}</dt>
-          <dd className="num text-right text-sm font-medium text-foreground">{item.value}</dd>
+          <dt className="text-xs text-muted-foreground">
+            {calculation ? <button type="button" onClick={() => openDetail(calculation)} className="cursor-pointer rounded-sm hover:text-primary focus-visible:outline-2 focus-visible:outline-primary" title="View formula and inputs">{item.label}</button> : item.label}
+          </dt>
+          <dd className="num text-right text-sm font-medium text-foreground">
+            {calculation ? <button type="button" onClick={() => openDetail(calculation)} className="cursor-pointer rounded-sm hover:text-primary focus-visible:outline-2 focus-visible:outline-primary" title="View formula and inputs">{item.value}</button> : item.value}
+          </dd>
         </div>
-      ))}
+      );})}
     </dl>
   );
 }

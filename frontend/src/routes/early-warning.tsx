@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { riskStyle, trendGlyph } from "@/lib/risk";
-import { DemoBadge, MetricCard, PageHeader, ProvenanceTag, RiskBadge, Section, StatusBadge } from "@/components/common/primitives";
+import { DemoBadge, MetricCard, PageHeader, ProvenanceTag, Section, StatusBadge } from "@/components/common/primitives";
 import { indicatorDetail } from "@/lib/detail";
 import { useAppState } from "@/state/app-state";
 
@@ -52,7 +52,6 @@ export function EarlyWarningPage() {
                 <th className="label-caps px-4 py-2">Trend</th>
                 <th className="label-caps px-4 py-2">Threshold</th>
                 <th className="label-caps px-4 py-2">Status</th>
-                <th className="label-caps px-4 py-2">Risk</th>
                 <th className="label-caps px-4 py-2">As of</th>
               </tr>
             </thead>
@@ -78,9 +77,6 @@ export function EarlyWarningPage() {
                   <td className="num px-4 py-2.5 text-xs text-muted-foreground">{ind.threshold}</td>
                   <td className="px-4 py-2.5">
                     <StatusBadge status={ind.status} />
-                  </td>
-                  <td className="px-4 py-2.5">
-                    <RiskBadge level={ind.riskLevel} size="sm" showDot={false} />
                   </td>
                   <td className="num px-4 py-2.5 text-xs text-muted-foreground">{ind.date}</td>
                 </tr>

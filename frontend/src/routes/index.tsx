@@ -86,12 +86,11 @@ export function DashboardPage() {
           <h2 id="ai-reports-title" className="text-lg font-semibold">AI summary Report Generation</h2>
           <p className="text-sm text-muted-foreground">Generate and download a two-page PDF summary for this counterparty.</p>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {([
             ["exposure", "Exposure"],
             ["contagion", "Contagion Risk"],
             ["risk-overview", "Risk Overview"],
-            ["evidence-sources", "Evidence & Sources"],
           ] as const).map(([section, title]) => (
             <div className="panel flex min-h-32 flex-col justify-between gap-4 p-4" key={section}>
               <h3 className="font-semibold">{title}</h3>
@@ -114,7 +113,6 @@ export function DashboardPage() {
           <RiskGauge
             score={overallRisk.score}
             level={overallRisk.level}
-            label={overallRisk.previousScore === undefined ? `Backend calculation · ${overallRisk.provenance.toLowerCase()}` : `Previous ${overallRisk.previousScore} · demo data`}
             className="mt-3"
           />
           <div className="mt-4 w-full border-t border-border pt-3">

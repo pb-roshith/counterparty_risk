@@ -1,7 +1,6 @@
 
 
-import { formatMoney } from "@/lib/risk";
-import { DemoBadge, MetricCard, PageHeader, ProvenanceTag, RiskBadge, Section } from "@/components/common/primitives";
+import { DemoBadge, MetricCard, PageHeader, ProvenanceTag, Section } from "@/components/common/primitives";
 import {
   ExposureBarChart,
   ExposureColumnChart,
@@ -50,19 +49,16 @@ export function ExposurePage() {
       </div>
 
       <Section
-        title="Guarantees and credit support"
+        title="Guarantees"
         description="Third-party support that reduces net exposure."
         dense
       >
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] text-sm">
+          <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-surface-muted text-left">
                 <th className="label-caps px-4 py-2">Guarantor</th>
                 <th className="label-caps px-4 py-2">Type</th>
-                <th className="label-caps px-4 py-2 text-right">Amount</th>
-                <th className="label-caps px-4 py-2">Enforceability</th>
-                <th className="label-caps px-4 py-2">Expiry</th>
               </tr>
             </thead>
             <tbody>
@@ -70,11 +66,6 @@ export function ExposurePage() {
                 <tr key={g.id} className="border-b border-border/70 last:border-0">
                   <td className="px-4 py-2.5 font-medium text-foreground">{g.guarantorName}</td>
                   <td className="px-4 py-2.5 text-xs">{g.type}</td>
-                  <td className="num px-4 py-2.5 text-right font-medium">{formatMoney(g.amount)}</td>
-                  <td className="px-4 py-2.5">
-                    <RiskBadge level={g.enforceability} size="sm" showDot={false} />
-                  </td>
-                  <td className="num px-4 py-2.5 text-xs text-muted-foreground">{g.expiry ?? "Open-ended"}</td>
                 </tr>
               ))}
             </tbody>

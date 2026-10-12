@@ -141,6 +141,10 @@ class Neo4jGraphRepository:
         self.driver.verify_connectivity()
         return True
 
+    def delete_counterparty(self, entity_id: str) -> None:
+        self.driver.execute_query(
+            "MATCH (n:CanonicalEntity {canonical_entity_id: $id}) DETACH DELETE n", id=entity_id)
+
     def bootstrap(self) -> None:
         for statement in self.SCHEMA:
             self.driver.execute_query(statement)

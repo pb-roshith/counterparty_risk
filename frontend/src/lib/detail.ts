@@ -170,9 +170,9 @@ export const assetDetail = (asset: Asset): DetailPayload => ({
     { label: "Gross value", value: formatMoney(asset.value) },
     { label: "Collateral value", value: formatMoney(asset.collateralValue) },
     { label: "Haircut", value: `${asset.haircutPct}%` },
+    { label: "Formula", value: "Post-haircut collateral value = collateral value × (1 - haircut / 100)" },
+    { label: "Post-haircut value", value: formatMoney({ ...asset.collateralValue, amount: asset.collateralValue.amount * (1 - asset.haircutPct / 100) }) },
     { label: "Ownership", value: asset.ownership },
-    { label: "Encumbrance", value: asset.encumbrance.replace(/_/g, " ") },
-    { label: "Recovery priority", value: String(asset.recoveryPriority) },
   ],
   actions: [{ label: "View Evidence", to: "/evidence" }],
 });

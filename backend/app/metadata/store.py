@@ -5,7 +5,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-from sqlalchemy import DateTime, Float, ForeignKey, JSON, String, Text, create_engine, select
+from sqlalchemy import DateTime, Float, ForeignKey, JSON, String, Text, create_engine, select, delete
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
@@ -221,6 +221,18 @@ class MetadataStore:
         from app.models import ScoreInputs
         with Session(self.engine) as session:
             return {row.entity_id: ScoreInputs.model_validate_json(row.payload) for row in session.scalars(select(RiskInputRecord)).all()}
+
+    def delete_counterparty(self, entity_id: str) -> None:
+        with Session(self.engine) as session:
+            for model in (ManufacturedExposure, ManufacturedExposureBreakdown, ManufacturedAssetsRecovery,
+                          ManufacturedAsset, ManufacturedEarlyWarning, ManufacturedEarlyWarningIndicator,
+                          ManufacturedContagion, ManufacturedRisk, ManufacturedOtherInfo,
+                          RiskInputRecord, RiskRun, WorkflowAction, ManufacturedDetail):
+                session.execute(delete(model).where(model.entity_id == entity_id))
+            for row in session.scalars(select(ExposureRecord)).all():
+                if json.loads(row.payload).get("entity_id") == entity_id:
+                    session.delete(row)
+            session.commit()
 
     def save_manufactured_batch(self, batch_id: str, records: list[dict]) -> None:
         with Session(self.engine) as session:

@@ -87,6 +87,14 @@ export async function fetchManufacturedCounterparties(): Promise<ManufacturedCou
   return response.json() as Promise<ManufacturedCounterparty[]>;
 }
 
+export async function deleteCounterparty(counterpartyId: string): Promise<void> {
+  const response = await fetch(`${apiBase}/api/counterparties/${encodeURIComponent(counterpartyId)}`, { method: "DELETE" });
+  if (!response.ok) {
+    const body = await response.json().catch(() => null) as { detail?: string } | null;
+    throw new Error(body?.detail ?? `Delete API returned ${response.status}`);
+  }
+}
+
 export async function generateManufacturedCounterparties(count: number): Promise<{ batch_id: string; created_count: number }> {
   const response = await fetch(`${apiBase}/api/manufactured-counterparties/generate`, {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ count }),
